@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jc.dao.PunchCardMapper">
+
+    <resultMap id="PunchCardMap" type="com.jc.entity.PunchCard">
+        <id column="id" property="id"/>
+        <result column="clock_one" property="clockOne"/>
+        <result column="clock_in_date" property="clockTnDate"/>
+        <result column="remark" property="remark"/>
+
+    </resultMap>
+
+    <select id="listPunchCard"  resultMap="PunchCardMap">
+        SELECT * FROM  punchcard
+        <where>
+
+            <if test="name != null and name != ''">
+                and clock_one like '%${name}%'
+            </if>
+        </where>
+        limit #{currentPage},#{limit}
+    </select>
+
+    <select id="getCountTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(1) from punchcard
+        where clock_one like '%${name}%'
+
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="PunchCardMap">
+        select * from punchcard where id=#{id}
+    </select>
+
+    <insert id="insertPunchCard" parameterType="com.jc.entity.PunchCard">
+        insert into punchcard(id,clock_one,clock_in_date,remark)
+        value(#{id},#{clockOne},#{clockTnDate},#{remark})
+    </insert>
+
+
+</mapper>

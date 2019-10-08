@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jc.dao.CheckReportMapper">
+
+    <resultMap id="CheckReportMap" type="com.jc.entity.CheckReport">
+        <id column="id" property="id"/>
+        <result column="staff_code" property="staffCode"/>
+        <result column="name" property="name"/>
+        <result column="morning_shift" property="morningShift"/>
+        <result column="afternoon_time" property="afternoonTime"/>
+        <result column="attendance" property="attendance"/>
+    </resultMap>
+
+
+    <select id="listCheckReport"  resultMap="CheckReportMap">
+        SELECT * FROM  checkreport
+        <where>
+
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+        </where>
+        limit #{currentPage},#{limit}
+    </select>
+
+    <select id="getCountTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(1) from checkreport
+        where name like '%${name}%'
+
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="CheckReportMap">
+        select * from checkreport where id=#{id}
+    </select>
+
+    <insert id="insertCheckReport" parameterType="com.jc.entity.CheckReport">
+        insert into classes(id,staff_code,name,morning_shift,afternoon_time,attendance)
+        value(#{id},#{staffCode},#{name},#{morningShift},#{afternoonTime},#{attendance})
+    </insert>
+
+
+</mapper>

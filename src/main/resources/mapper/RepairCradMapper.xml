@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jc.dao.RepairCradMapper">
+
+    <resultMap id="RepairCradMap" type="com.jc.entity.RepairCrad">
+        <id column="id" property="id"/>
+        <result column="repair_people" property="repairPeople"/>
+        <result column="repair_date" property="repairDate"/>
+        <result column="cause" property="cause"/>
+
+    </resultMap>
+
+
+    <!--返回的结果如果是一个对象(pojo,entity)要写清楚它的全路径-->
+    <select id="listRepairCrad"  resultMap="RepairCradMap">
+        SELECT * FROM  repaircrad
+        <where>
+
+            <if test="name != null and name != ''">
+                and repair_people like '%${name}%'
+            </if>
+        </where>
+        limit #{currentPage},#{limit}
+    </select>
+
+    <select id="getCountTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(1) from repaircrad
+        where repair_people like '%${name}%'
+
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="RepairCradMap">
+        select * from repaircrad where id=#{id}
+    </select>
+
+
+    <insert id="insertRepairCrad" parameterType="com.jc.entity.RepairCrad">
+        insert into repaircrad(id,repair_people,repair_date,cause)
+        value(#{id},#{repairPeople},#{repairDate},#{cause})
+    </insert>
+
+    <update id="updateRepairCrad" parameterType="com.jc.entity.RepairCrad">
+        update repaircrad set repair_people=#{repairPeople},repair_date=#{repairDate}, cause=#{cause}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteRepairCrad" parameterType="com.jc.entity.RepairCrad">
+        delete from repaircrad where id=#{1}
+    </delete>
+
+</mapper>
